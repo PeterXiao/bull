@@ -30,7 +30,7 @@ public class CacheManagerFactoryTest {
     /**
      * Cache name param.
      */
-    private static final String CACHE_NAME = "cacheName";
+    private static final int CACHE_NAME = 0;
 
     /**
      * The class to be tested.
@@ -44,17 +44,6 @@ public class CacheManagerFactoryTest {
     @BeforeClass
     public void beforeClass() {
         initMocks(this);
-    }
-
-    /**
-     * Tests that the method: {@code getCacheManager} returns a {@link CacheManager} instance.
-     */
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetCacheThrowsExceptionIfTheCacheNameIsNull() {
-        // GIVEN
-
-        // WHEN
-        underTest.getCacheManager(null);
     }
 
     /**

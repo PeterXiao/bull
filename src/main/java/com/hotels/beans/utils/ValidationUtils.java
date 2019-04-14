@@ -16,7 +16,6 @@
 
 package com.hotels.beans.utils;
 
-import static java.util.Objects.isNull;
 import static java.util.stream.Collectors.joining;
 
 import static javax.validation.Validation.buildDefaultValidatorFactory;
@@ -40,6 +39,16 @@ import com.hotels.beans.error.InvalidBeanException;
  */
 public class ValidationUtils {
     /**
+     * Cache key for class: {@link ValidationUtils}.
+     */
+    private static final int VALIDATION_UTILS_CACHE_KEY = 3;
+
+    /**
+     * Bean validator cache key.
+     */
+    private static final String BEAN_VALIDATOR_KEY = "BeanValidator";
+
+    /**
      * CacheManager class {@link CacheManager}.
      */
     private final CacheManager cacheManager;
@@ -48,7 +57,7 @@ public class ValidationUtils {
      * Default constructor.
      */
     public ValidationUtils() {
-        this.cacheManager = getCacheManager("validationUtils");
+        this.cacheManager = getCacheManager(VALIDATION_UTILS_CACHE_KEY);
     }
 
     /**
@@ -59,7 +68,7 @@ public class ValidationUtils {
      * @throws IllegalArgumentException if the object is {@code null}
      */
     public static <T> void notNull(final T object) {
-        if (isNull(object)) {
+        if (object == null) {
             throw new IllegalArgumentException();
         }
     }
@@ -73,7 +82,7 @@ public class ValidationUtils {
      * @throws IllegalArgumentException if the object is {@code null}
      */
     public static <T> void notNull(final T object, final String message) {
-        if (isNull(object)) {
+        if (object == null) {
             throw new IllegalArgumentException(message);
         }
     }
@@ -103,11 +112,10 @@ public class ValidationUtils {
      * @return a {@link Validator} instance.
      */
     private Validator getValidator() {
-        String cacheKey = "BeanValidator";
-        return cacheManager.getFromCache(cacheKey, Validator.class)
+        return cacheManager.getFromCache(BEAN_VALIDATOR_KEY, Validator.class)
                 .orElseGet(() -> {
                     Validator validator = buildDefaultValidatorFactory().getValidator();
-                    cacheManager.cacheObject(cacheKey, validator);
+                    cacheManager.cacheObject(BEAN_VALIDATOR_KEY, validator);
                     return validator;
                 });
     }

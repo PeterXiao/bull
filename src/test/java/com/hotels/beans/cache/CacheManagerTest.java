@@ -22,10 +22,11 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 /**
  * Unit test for {@link CacheManager}.
@@ -44,7 +45,7 @@ public class CacheManagerTest {
      */
     @BeforeClass
     public void beforeClass() {
-        underTest = new CacheManager(new ConcurrentHashMap<>());
+        underTest = new CacheManager(Caffeine.newBuilder().build());
     }
 
     /**
@@ -62,28 +63,6 @@ public class CacheManagerTest {
         assertFalse(actual.isEmpty());
         assertEquals(CACHED_OBJECT_CLASS, actual.get().getClass());
         assertSame(CACHED_VALUE, actual.get());
-    }
-
-    /**
-     * Tests that the method {@code getFromCache} throw exception when the cache key.
-     */
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetFromCacheThrowsExceptionWhenTheCacheKeyIsNull() {
-        // GIVEN
-
-        // WHEN
-        underTest.getFromCache(null, CACHED_OBJECT_CLASS);
-    }
-
-    /**
-     * Tests that the method {@code getFromCache} throw exception when the cached value class is null.
-     */
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetFromCacheThrowsExceptionWhenTheCachedValueClassIsNull() {
-        // GIVEN
-
-        // WHEN
-        underTest.getFromCache(CACHE_KEY, null);
     }
 
     /**

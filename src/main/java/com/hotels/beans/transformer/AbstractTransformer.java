@@ -37,6 +37,11 @@ import com.hotels.beans.utils.ValidationUtils;
  */
 abstract class AbstractTransformer implements Transformer {
     /**
+     * Cache key for class: {@link AbstractTransformer}.
+     */
+    private static final int TRANSFORMER_CACHE_KEY = 0;
+
+    /**
      * Reflection utils instance {@link ReflectionUtils}.
      */
     final ReflectionUtils reflectionUtils;
@@ -69,7 +74,7 @@ abstract class AbstractTransformer implements Transformer {
         this.classUtils = new ClassUtils();
         this.validationUtils = new ValidationUtils();
         this.settings = new TransformerSettings();
-        this.cacheManager = CacheManagerFactory.getCacheManager("transformer");
+        this.cacheManager = CacheManagerFactory.getCacheManager(TRANSFORMER_CACHE_KEY);
     }
 
     /**

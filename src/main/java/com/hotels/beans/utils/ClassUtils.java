@@ -65,6 +65,11 @@ import com.hotels.beans.error.InvalidBeanException;
  */
 public final class ClassUtils {
     /**
+     * Cache key for class: {@link ClassUtils}.
+     */
+    private static final int CLASS_UTILS_CACHE_KEY = 1;
+
+    /**
      * Class nullability error message constant.
      */
     private static final String CLAZZ_CANNOT_BE_NULL = "clazz cannot be null!";
@@ -84,7 +89,7 @@ public final class ClassUtils {
      */
     public ClassUtils() {
         this.reflectionUtils = new ReflectionUtils();
-        this.cacheManager = getCacheManager("classUtils");
+        this.cacheManager = getCacheManager(CLASS_UTILS_CACHE_KEY);
     }
 
     /**
@@ -93,7 +98,7 @@ public final class ClassUtils {
      * @return true if is primitive or special type, false otherwise
      */
     public boolean isPrimitiveOrSpecialType(final Class<?> clazz) {
-        notNull(clazz, CLAZZ_CANNOT_BE_NULL);
+//        notNull(clazz, CLAZZ_CANNOT_BE_NULL);
         final String cacheKey = "isPrimitiveOrSpecial-" + clazz.getName();
         return cacheManager.getFromCache(cacheKey, Boolean.class).orElseGet(() -> {
             final Boolean res = isPrimitiveType(clazz) || isSpecialType(clazz);
@@ -108,10 +113,10 @@ public final class ClassUtils {
      * @return true if is special type, false otherwise
      */
     public boolean isPrimitiveType(final Class<?> clazz) {
-        notNull(clazz, CLAZZ_CANNOT_BE_NULL);
+//        notNull(clazz, CLAZZ_CANNOT_BE_NULL);
         final String cacheKey = "isPrimitive-" + clazz.getName();
         return cacheManager.getFromCache(cacheKey, Boolean.class).orElseGet(() -> {
-            final Boolean res = clazz.isPrimitive() || clazz.equals(String.class) || Number.class.isAssignableFrom(clazz) || clazz.equals(Byte.class) || clazz.isEnum();
+            final Boolean res = clazz.isPrimitive() || clazz.equals(String.class) || Number.class.isAssignableFrom(clazz) || clazz.isEnum();
             cacheManager.cacheObject(cacheKey, res);
             return res;
         });
@@ -123,7 +128,7 @@ public final class ClassUtils {
      * @return true if is primitive type array, false otherwise
      */
     public boolean isPrimitiveTypeArray(final Object object) {
-        notNull(object, CLAZZ_CANNOT_BE_NULL);
+//        notNull(object, CLAZZ_CANNOT_BE_NULL);
         final String cacheKey = "isPrimitiveTypeArray-" + object.getClass().getName();
         return cacheManager.getFromCache(cacheKey, Boolean.class).orElseGet(() -> {
             final Boolean res = object instanceof int[] || object instanceof char[] || object instanceof short[]
@@ -140,11 +145,10 @@ public final class ClassUtils {
      * @return true if is special type, false otherwise
      */
     public boolean isSpecialType(final Class<?> clazz) {
-        notNull(clazz, CLAZZ_CANNOT_BE_NULL);
+//        notNull(clazz, CLAZZ_CANNOT_BE_NULL);
         final String cacheKey = "isSpecial-" + clazz.getName();
         return cacheManager.getFromCache(cacheKey, Boolean.class).orElseGet(() -> {
-            final Boolean res = clazz.equals(Currency.class) || clazz.equals(Locale.class) || Temporal.class.isAssignableFrom(clazz)
-                    || clazz.isSynthetic() || clazz.isAnonymousClass();
+            final Boolean res = clazz.equals(Currency.class) || clazz.equals(Locale.class) || Temporal.class.isAssignableFrom(clazz);
             cacheManager.cacheObject(cacheKey, res);
             return res;
         });

@@ -53,6 +53,11 @@ import com.hotels.beans.model.MapType;
  */
 public final class ReflectionUtils {
     /**
+     * Cache key for class: {@link ReflectionUtils}.
+     */
+    private static final int REFLECTION_UTILS_CACHE_KEY = 2;
+
+    /**
      * boolean type name.
      */
     private static final String BOOLEAN = "boolean";
@@ -76,7 +81,7 @@ public final class ReflectionUtils {
      * Default constructor.
      */
     public ReflectionUtils() {
-        this.cacheManager = getCacheManager("reflectionUtils");
+        this.cacheManager = getCacheManager(REFLECTION_UTILS_CACHE_KEY);
     }
 
     /**
@@ -403,8 +408,8 @@ public final class ReflectionUtils {
      * @return the generic type class
      */
     public MapType getMapGenericType(final Type fieldType, final String declaringClass, final String fieldName) {
-        notNull(fieldType, "fieldType cannot be null!");
-        notNull(fieldName, "fieldName cannot be null!");
+//        notNull(fieldType, "fieldType cannot be null!");
+//        notNull(fieldName, "fieldName cannot be null!");
         final Class<?> fieldClass = getArgumentTypeClass(fieldType, declaringClass, fieldName, false);
         if (isNull(fieldClass) || !Map.class.isAssignableFrom(fieldClass)) {
             throw new IllegalArgumentException(

@@ -16,12 +16,11 @@
 
 package com.hotels.beans.cache;
 
-import static com.hotels.beans.utils.ValidationUtils.notNull;
+import static com.github.benmanes.caffeine.cache.Caffeine.newBuilder;
 
 import static lombok.AccessLevel.PRIVATE;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.github.benmanes.caffeine.cache.Cache;
 
 import lombok.NoArgsConstructor;
 
@@ -31,17 +30,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PRIVATE)
 public final class CacheManagerFactory {
     /**
+     * Initial capacity for cache manager.
+     */
+    private static final int INITIAL_CAPACITY = 5;
+
+    /**
      * Cache store.
      */
-    private static final Map<String, Map<String, Object>> CACHE_MAP = new ConcurrentHashMap<>();
+    private static final Cache<Integer, CacheManager> CACHE_MAP = newBuilder().initialCapacity(INITIAL_CAPACITY).build();
 
     /**
      * Creates a new {@link CacheManager} instance.
      * @param cacheName the cache name
      * @return a cache manager instance
      */
-    public static CacheManager getCacheManager(final String cacheName) {
-        notNull(cacheName, "cacheName cannot be null!");
-        return new CacheManager(CACHE_MAP.computeIfAbsent(cacheName, k -> new ConcurrentHashMap<>()));
+    public static CacheManager getCacheManager(final int cacheName) {
+        return CACHE_MAP.get(cacheName, k -> new CacheManager(newBuilder().build()));
     }
 }
